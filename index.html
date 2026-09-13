@@ -1,0 +1,1064 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-900 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Inspection - Weekly Checklist</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background: white !important; color: black !important; }
+      .print-card { border: 1px solid #ccc !important; background: white !important; color: black !important; box-shadow: none !important; }
+      .print-text-dark { color: #000 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-slate-900 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
+
+  <!-- Navigation Bar -->
+  <header class="no-print sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 lg:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="p-2.5 bg-gradient-to-tr from-cyan-600 to-blue-600 rounded-xl shadow-lg shadow-cyan-500/20">
+        <i data-lucide="anchor" class="w-6 h-6 text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-black tracking-tight text-white leading-none flex items-center gap-2">
+          <span id="header-vessel-name">AUH Boats</span>
+          <span class="text-xs px-2 py-0.5 rounded-md bg-cyan-950 text-cyan-400 border border-cyan-800 font-mono font-bold">INSPECTION</span>
+        </h1>
+        <p class="text-xs text-slate-400 mt-1 font-medium">Weekly Safety, Sanitation & Operational Audit</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex items-center space-x-2">
+      <button onclick="switchTab('inspection')" id="nav-inspection-btn" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center space-x-2 bg-cyan-600 text-white shadow-lg shadow-cyan-600/20">
+        <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+        <span>Active Audit</span>
+      </button>
+      <button onclick="switchTab('history')" id="nav-history-btn" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center space-x-2 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700">
+        <i data-lucide="history" class="w-4 h-4"></i>
+        <span class="hidden sm:inline">Saved Logs</span>
+        <span id="history-count-badge" class="px-2 py-0.5 text-xs bg-slate-700 text-cyan-400 rounded-full font-bold ml-1">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 py-6 space-y-6">
+
+    <!-- TAB 1: ACTIVE INSPECTION -->
+    <div id="tab-inspection" class="space-y-6">
+
+      <!-- PREREQUISITE GATEKEEPER: DEEP CLEANING BANNER -->
+      <div id="deep-clean-card" class="rounded-2xl p-5 border shadow-2xl transition-all bg-slate-800/80 border-slate-700 relative overflow-hidden">
+    <div flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+          
+          <div class="flex items-start space-x-3.5">
+            <div id="deep-clean-icon-bg" class="p-3 rounded-2xl bg-slate-700/50 text-slate-400 border border-slate-600 shrink-0">
+              <i data-lucide="sparkles" class="w-7 h-7"></i>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-black tracking-wider uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Prerequisite Condition</span>
+                <span id="deep-clean-badge" class="text-xs font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800">NOT DONE ❎</span>
+              </div>
+              <h2 class="text-lg font-black text-white mt-1">Boat Deep Cleaning Status</h2>
+              <p id="deep-clean-msg" class="text-xs text-rose-200 mt-0.5 font-medium">
+                🚨 Deep cleaning must be completed (YES) before proceeding with the weekly inspection.
+              </p>
+            </div>
+          </div>
+
+          <!-- Mandatory Toggle Control -->
+          <div class="flex items-center space-x-3 bg-slate-950/80 p-2.5 rounded-xl border border-slate-700/80 shrink-0">
+            <span class="text-xs font-bold text-slate-300">Boat Deep Cleaned?</span>
+            <div class="flex space-x-1.5">
+              <button onclick="setDeepCleaningStatus('yes')" id="dc-yes-btn" type="button" class="px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-slate-800 border-slate-700 text-slate-400 hover:text-white">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                <span>YES ✅</span>
+              </button>
+              <button onclick="setDeepCleaningStatus('no')" id="dc-no-btn" type="button" class="px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-slate-800 border-slate-700 text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-4 h-4"></i>
+                <span>NO ❎</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Inspector Metadata & Summary Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Boat & Inspector Details Card -->
+        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-xl backdrop-blur flex flex-col justify-between space-y-4">
+          <div>
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <i data-lucide="ship" class="w-4 h-4 text-cyan-400"></i>
+              Boat & Inspector Details
+            </h2>
+            
+            <div class="space-y-3">
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-1">Boat Name *</label>
+                  <div class="relative">
+                    <i data-lucide="anchor" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3 z-10"></i>
+                    <select id="vessel-name" onchange="updateVesselIdentity()" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-8 pr-2 py-2 text-xs font-bold text-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition cursor-pointer">
+                      <option value="VOODOO 10" selected>VOODOO 10</option>
+                      <option value="GULFCRAFT 31">GULFCRAFT 31</option>
+                      <option value="ASM 1">ASM 1</option>
+                      <option value="ASM 2">ASM 2</option>
+                      <option value="ASM 10">ASM 10</option>
+                      <option value="SILVERCRAFT 3">SILVERCRAFT 3</option>
+                      <option value="SILVERCRAFT 5">SILVERCRAFT 5</option>
+                      <option value="SILVERCRAFT 7">SILVERCRAFT 7</option>
+                      <option value="SILVERCRAFT 10">SILVERCRAFT 10</option>
+                      <option value="SEAMASTER 6">SEAMASTER 6</option>
+                      <option value="SEAMASTER 13">SEAMASTER 13</option>
+                      <option value="DINO 2">DINO 2</option>
+                      <option value="DINO 8">DINO 8</option>
+                      <option value="DINO 9">DINO 9</option>
+                      <option value="VOODOO 4">VOODOO 4</option>
+                      <option value="VOODOO 9">VOODOO 9</option>
+                      <option value="PHENOM 11">PHENOM 11</option>
+                      <option value="PHENOM 17">PHENOM 17</option>
+                      <option value="SEARAY 3">SEARAY 3</option>
+                      <option value="SEARAY 4">SEARAY 4</option>
+                      <option value="SEARAY 6">SEARAY 6</option>
+                      <option value="REGAL 2">REGAL 2</option>
+                      <option value="REGAL 11">REGAL 11</option>
+                      <option value="REGAL 20">REGAL 20</option>
+                      <option value="XR7 EMP">XR7 EMP</option>
+                      <option value="HAYARI">HAYARI</option>
+                      <option value="HOUSE BOAT">HOUSE BOAT</option>
+                      <option value="SEAMASTER 11">SEAMASTER 11</option>
+                      <option value="PHENOM 19">PHENOM 19</option>
+                      <option value="SEAMASTER 14">SEAMASTER 14</option>
+                      <option value="SEAMASTER 2">SEAMASTER 2</option>
+                      <option value="H240">H240</option>
+                      <option value="BAYLINER VR">BAYLINER VR</option>
+                      <option value="XR7 YAS">XR7 YAS</option>
+                      <option value="REGAL 6">REGAL 6</option>
+                      <option value="FS 205">FS 205</option>
+                      <option value="PHENOM 9">PHENOM 9</option>
+                      <option value="PHENOM 1">PHENOM 1</option>
+                      <option value="HIPSTER">HIPSTER</option>
+                      <option value="TIGE">TIGE</option>
+                      <option value="STAR CRAFT SC">STAR CRAFT SC</option>
+                      <option value="FOURWINNS SIGNATURE">FOURWINNS SIGNATURE</option>
+                      <option value="STAR CRAFT COASTAL">STAR CRAFT COASTAL</option>
+                      <option value="REGAL 9">REGAL 9</option>
+                      <option value="DINO 5">DINO 5</option>
+                      <option value="SEAMASTER 8">SEAMASTER 8</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-1">License Expiry</label>
+                  <input type="date" id="license-exp-date" value="2026-08-02" onchange="updateVesselIdentity()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2 py-2 text-xs text-amber-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Inspector Full Name *</label>
+                <div class="relative">
+                  <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+                  <input type="text" id="inspector-name" placeholder="Enter inspector name" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-1">Audit Date</label>
+                  <input type="date" id="inspection-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-1">Shift</label>
+                  <select id="inspection-shift" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+                    <option value="Morning Shift">Morning Shift</option>
+                    <option value="Afternoon Shift">Afternoon Shift</option>
+                    <option value="Evening Shift">Evening Shift</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="license-status-tag" class="pt-3 border-t border-slate-700/60 flex justify-between items-center text-xs text-slate-400">
+            <span>Selected Boat: <strong id="vessel-display-tag" class="text-white font-bold">VOODOO 10</strong></span>
+            <span>License Exp: <strong id="license-display-tag" class="text-amber-400 font-bold">02/08/2026</strong></span>
+          </div>
+        </div>
+
+        <!-- Dashboard Counters Card -->
+        <div class="lg:col-span-2 bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-xl backdrop-blur flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                <i data-lucide="bar-chart-3" class="w-4 h-4 text-cyan-400"></i>
+                Inspection Readiness Dashboard
+              </h2>
+              <span id="completion-percentage" class="text-xs font-extrabold px-3 py-1 bg-slate-900 text-slate-300 border border-slate-700 rounded-full">0% Complete</span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden mb-5 border border-slate-700/50 p-0.5">
+              <div id="progress-bar" class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-full w-0 rounded-full transition-all duration-300"></div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div class="bg-slate-900/80 border border-slate-700/50 rounded-xl p-3 text-center shadow">
+                <p class="text-xs text-slate-400 font-medium">Check Items</p>
+                <p id="stat-total" class="text-2xl font-black text-white mt-0.5">25</p>
+              </div>
+              <div class="bg-emerald-950/40 border border-emerald-800/50 rounded-xl p-3 text-center shadow">
+                <p class="text-xs text-emerald-400 font-bold">Passed (✅)</p>
+                <p id="stat-yes" class="text-2xl font-black text-emerald-400 mt-0.5">0</p>
+              </div>
+              <div class="bg-rose-950/40 border border-rose-800/50 rounded-xl p-3 text-center shadow">
+                <p class="text-xs text-rose-400 font-bold">Issues (❎)</p>
+                <p id="stat-no" class="text-2xl font-black text-rose-400 mt-0.5">0</p>
+              </div>
+              <div class="bg-amber-950/40 border border-amber-800/50 rounded-xl p-3 text-center shadow">
+                <p class="text-xs text-amber-400 font-bold">Unchecked / Pending</p>
+                <p id="stat-pending" class="text-2xl font-black text-amber-400 mt-0.5">25</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions & Filters -->
+          <div class="mt-4 pt-3 border-t border-slate-700/60 flex flex-wrap gap-2 items-center justify-between">
+            <div class="flex flex-wrap gap-1">
+              <button onclick="setFilter('all')" id="filter-all" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition bg-slate-700 text-white">All (25)</button>
+              <button onclick="setFilter('pending')" id="filter-pending" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition text-slate-400 hover:bg-slate-700">Pending (25)</button>
+              <button onclick="setFilter('yes')" id="filter-yes" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition text-slate-400 hover:bg-slate-700">Passed (YES)</button>
+              <button onclick="setFilter('no')" id="filter-no" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition text-slate-400 hover:bg-slate-700">Issues (NO)</button>
+            </div>
+            
+            <div class="flex space-x-2">
+              <button onclick="applyPresetDefaults()" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 font-semibold transition flex items-center gap-1.5 shadow">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset to Unselected
+              </button>
+              <button onclick="markAllYes()" class="text-xs px-3 py-1.5 rounded-lg bg-emerald-900/60 text-emerald-300 hover:bg-emerald-800/80 border border-emerald-700/60 font-semibold transition flex items-center gap-1.5 shadow">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Mark All YES
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Locked / Warning Banner -->
+      <div id="locked-checklist-warning" class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 text-center space-y-2 shadow-2xl">
+        <i id="lock-icon" data-lucide="alert-circle" class="w-8 h-8 text-amber-400 mx-auto"></i>
+        <h3 id="lock-title" class="text-base font-bold text-white uppercase tracking-wider">Deep Cleaning Check Required</h3>
+        <p id="lock-desc" class="text-xs text-slate-300 max-w-xl mx-auto">
+          Please confirm boat deep cleaning status above. If deep cleaning is set to <strong class="text-emerald-400 underline">YES ✅</strong>, the full inspection checklist will unlock.
+        </p>
+      </div>
+
+      <!-- Checklist Items Container -->
+      <div id="checklist-container" class="space-y-4 transition-all duration-300 opacity-30 pointer-events-none">
+        <!-- Categories and items loaded dynamically via JS -->
+      </div>
+
+      <!-- General Remarks & Submit Card -->
+      <div id="submit-card" class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-xl space-y-4 opacity-30 pointer-events-none">
+        <div>
+          <label class="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-4 h-4 text-cyan-400"></i>
+            General Inspection Summary / Action Required Notes
+          </label>
+          <textarea id="general-notes" rows="3" placeholder="Enter overall inspection notes, work orders required, or missing items to restock..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition placeholder:text-slate-600"></textarea>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
+          <p class="text-xs text-slate-400">
+            * All 25 checklist items must be checked (YES or NO) before generating the report.
+          </p>
+          <div class="flex space-x-3 w-full sm:w-auto">
+            <button onclick="saveInspectionReport()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-extrabold rounded-xl shadow-lg shadow-cyan-600/30 transition flex items-center justify-center space-x-2">
+              <i data-lucide="save" class="w-5 h-5"></i>
+              <span>Save & Generate Report</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: SAVED INSPECTION HISTORY -->
+    <div id="tab-history" class="hidden space-y-6">
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-700">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i data-lucide="archive" class="w-5 h-5 text-cyan-400"></i>
+              Saved Inspection Records
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Review, re-print, or export historical audit logs for your fleet.</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="exportAllDataJSON()" class="px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-xl text-slate-200 transition flex items-center space-x-1.5 border border-slate-600">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Export JSON</span>
+            </button>
+            <button onclick="clearHistory()" class="px-3.5 py-2 bg-rose-950/40 border border-rose-800/60 hover:bg-rose-900/60 text-xs font-semibold rounded-xl text-rose-300 transition flex items-center space-x-1.5">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+              <span>Clear History</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="history-list" class="space-y-4">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Inspection Details / Printable Modal -->
+  <div id="report-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6 hidden">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden print-card">
+      
+      <!-- Modal Header -->
+      <div class="no-print p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="file-check" class="w-5 h-5 text-cyan-400"></i>
+          <h3 class="font-bold text-white text-base">Weekly Marine Inspection Summary Sheet</h3>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Printable Body -->
+      <div id="modal-content" class="p-6 overflow-y-auto space-y-6 text-slate-100 print-text-dark">
+        <!-- JS dynamically fills printable template -->
+      </div>
+
+      <!-- Modal Controls -->
+      <div class="no-print p-4 bg-slate-900 border-t border-slate-700 flex justify-between items-center">
+        <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-xl text-slate-300 transition">
+          Close
+        </button>
+        <button onclick="window.print()" class="px-6 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-xs font-extrabold rounded-xl text-white transition flex items-center space-x-2 shadow-lg shadow-cyan-600/30">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          <span>Print / Export PDF</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-800 text-white border border-slate-700 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
+    <div id="toast-icon" class="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-400">
+      <i data-lucide="info" class="w-5 h-5"></i>
+    </div>
+    <span id="toast-message" class="text-sm font-medium">Notification message</span>
+  </div>
+
+  <script>
+    // --- MASTER CONFIGURATION & UPDATED ITEM LIST ---
+    let VESSEL_INFO = {
+      name: "VOODOO 10",
+      licenseExp: "2026-08-02",
+      deepCleaned: "no" // Defaults to "NO" by default
+    };
+
+    const CHECKLIST_ITEMS = [
+      // Documentation & Admin
+      { id: "lic_exp", category: "Documentation & Admin", name: "License expiry date", detail: "Expiration Check", defaultStatus: null, defaultNotes: "" },
+
+      // Hull, Deck & Mooring
+      { id: "stainless_polished", category: "Hull, Deck & Mooring", name: "Stainless polished", detail: "Cleats, Rails & Hardware", defaultStatus: null, defaultNotes: "" },
+      { id: "anchors", category: "Hull, Deck & Mooring", name: "2 anchors", detail: "2 Units Required", defaultStatus: null, defaultNotes: "" },
+      { id: "fenders", category: "Hull, Deck & Mooring", name: "Two clean fenders", detail: "2 Clean Units", defaultStatus: null, defaultNotes: "" },
+      { id: "mooring_lines", category: "Hull, Deck & Mooring", name: "Mooring lines", detail: "Ropes & Dock Lines", defaultStatus: null, defaultNotes: "" },
+      { id: "ladder", category: "Hull, Deck & Mooring", name: "Ladder", detail: "Swim Boarding Ladder", defaultStatus: null, defaultNotes: "" },
+
+      // Safety & Life Saving
+      { id: "life_ring", category: "Safety & Life Saving", name: "Life ring", detail: "1 Unit Required", defaultStatus: null, defaultNotes: "" },
+      { id: "fire_ext", category: "Safety & Life Saving", name: "Fire extinguisher", detail: "Pressure Gauge Checked", defaultStatus: null, defaultNotes: "" },
+      { id: "first_aid", category: "Safety & Life Saving", name: "First aid kit", detail: "Fully Stocked", defaultStatus: null, defaultNotes: "" },
+      { id: "life_jackets", category: "Safety & Life Saving", name: "Life jackets", detail: "Adult & Child Sizes", defaultStatus: null, defaultNotes: "" },
+      { id: "horn", category: "Safety & Life Saving", name: "Horn", detail: "Sound Signal Device", defaultStatus: null, defaultNotes: "" },
+
+      // Navigation & Electrical
+      { id: "anchor_lights", category: "Navigation & Electrical", name: "Anchor lights", detail: "Topmast Light", defaultStatus: null, defaultNotes: "" },
+      { id: "nav_lights", category: "Navigation & Electrical", name: "Navigation lights", detail: "Port & Starboard", defaultStatus: null, defaultNotes: "" },
+      { id: "interior_lights", category: "Navigation & Electrical", name: "Interior lights", detail: "Cabin Lighting", defaultStatus: null, defaultNotes: "" },
+      { id: "gps_sonar", category: "Navigation & Electrical", name: "GPS sonar", detail: "Depth & Navigation Chartplotter", defaultStatus: null, defaultNotes: "" },
+      { id: "gps_cover", category: "Navigation & Electrical", name: "GPS cover", detail: "Protective Screen Cap", defaultStatus: null, defaultNotes: "" },
+      { id: "dashboard_cover", category: "Navigation & Electrical", name: "Dashboard cover", detail: "Helm Canvas Protection", defaultStatus: null, defaultNotes: "" },
+      { id: "bilge_pump", category: "Navigation & Electrical", name: "Bilge pump", detail: "Automatic Float Switch", defaultStatus: null, defaultNotes: "" },
+      { id: "speakers", category: "Navigation & Electrical", name: "Speakers", detail: "Sound System", defaultStatus: null, defaultNotes: "" },
+
+      // Amenities & Sanitation
+      { id: "cooler_box", category: "Amenities & Sanitation", name: "Cooler box", detail: "Clean & Drained", defaultStatus: null, defaultNotes: "" },
+      { id: "freshwater", category: "Amenities & Sanitation", name: "Freshwater", detail: "Freshwater System & Tank", defaultStatus: null, defaultNotes: "" },
+      { id: "tissue", category: "Amenities & Sanitation", name: "Tissue", detail: "Restocked", defaultStatus: null, defaultNotes: "" },
+      { id: "bin_basket", category: "Amenities & Sanitation", name: "Bin basket", detail: "Emptied & Lined", defaultStatus: null, defaultNotes: "" },
+      { id: "toilet_brush", category: "Amenities & Sanitation", name: "Toilet brush", detail: "Sanitation Cleaner", defaultStatus: null, defaultNotes: "" }
+    ];
+
+    // App State
+    let currentInspection = {};
+    let activeFilter = 'all';
+    let savedReports = [];
+
+    window.onload = function() {
+      // Set today's date
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('inspection-date').value = today;
+
+      // Load saved records from storage
+      loadSavedReports();
+
+      // Initialize default pre-check state to unselected neutral
+      applyPresetDefaults(false);
+
+      // Initial Sync Vessel Identity
+      updateVesselIdentity();
+
+      // Initialize Deep Clean state to "NO" baseline by default
+      setDeepCleaningStatus('no', false);
+
+      lucide.createIcons();
+    };
+
+    function updateVesselIdentity() {
+      const vNameInput = document.getElementById('vessel-name').value || 'VOODOO 10';
+      const vExpInput = document.getElementById('license-exp-date').value || '2026-08-02';
+
+      VESSEL_INFO.name = vNameInput;
+      VESSEL_INFO.licenseExp = vExpInput;
+
+      document.getElementById('header-vessel-name').innerText = vNameInput;
+      document.getElementById('vessel-display-tag').innerText = vNameInput;
+      document.getElementById('license-display-tag').innerText = formatDateString(vExpInput);
+    }
+
+    function formatDateString(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        return `${parts[1]}/${parts[2]}/${parts[0]}`;
+      }
+      return dateStr;
+    }
+
+    // --- GATEKEEPER CONDITION CONTROLLER ---
+    function setDeepCleaningStatus(status, notify = true) {
+      // Toggle off if same status selected again
+      if (VESSEL_INFO.deepCleaned === status && status !== null) {
+        VESSEL_INFO.deepCleaned = null;
+      } else {
+        VESSEL_INFO.deepCleaned = status;
+      }
+
+      const card = document.getElementById('deep-clean-card');
+      const badge = document.getElementById('deep-clean-badge');
+      const msg = document.getElementById('deep-clean-msg');
+      const iconBg = document.getElementById('deep-clean-icon-bg');
+      const yesBtn = document.getElementById('dc-yes-btn');
+      const noBtn = document.getElementById('dc-no-btn');
+      const container = document.getElementById('checklist-container');
+      const lockWarning = document.getElementById('locked-checklist-warning');
+      const lockTitle = document.getElementById('lock-title');
+      const lockDesc = document.getElementById('lock-desc');
+      const lockIcon = document.getElementById('lock-icon');
+      const submitCard = document.getElementById('submit-card');
+
+      if (VESSEL_INFO.deepCleaned === 'yes') {
+        card.className = "rounded-2xl p-5 border shadow-2xl transition-all bg-gradient-to-r from-emerald-950/80 via-slate-900 to-slate-900 border-emerald-500/60 relative overflow-hidden";
+        badge.className = "text-xs font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-700";
+        badge.innerText = "PASSED ✅";
+        msg.className = "text-xs text-emerald-200/90 mt-0.5 font-medium";
+        msg.innerText = "✅ Prerequisite met: Boat deep cleaning confirmed. Full inspection unlocked.";
+        iconBg.className = "p-3 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shrink-0";
+
+        yesBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-600/30 ring-2 ring-emerald-400/40";
+        noBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-slate-800 border-slate-700 text-slate-400 hover:text-white";
+
+        container.classList.remove('opacity-30', 'pointer-events-none');
+        lockWarning.classList.add('hidden');
+        submitCard.classList.remove('opacity-30', 'pointer-events-none');
+
+        if (notify) showToast('Deep cleaning verified! Inspection unlocked.', 'check-circle-2', 'emerald');
+      } else {
+        // Default / NO state behavior
+        card.className = "rounded-2xl p-5 border shadow-2xl transition-all bg-gradient-to-r from-rose-950/90 via-slate-900 to-slate-900 border-rose-600 relative overflow-hidden";
+        badge.className = "text-xs font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800";
+        badge.innerText = "NOT DONE ❎";
+        msg.className = "text-xs text-rose-200 mt-0.5 font-medium";
+        msg.innerText = "🚨 Deep cleaning must be completed (YES) before proceeding with the weekly inspection.";
+        iconBg.className = "p-3 rounded-2xl bg-rose-500/20 text-rose-400 border border-rose-500/40 shrink-0";
+
+        noBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-600/30 ring-2 ring-rose-400/40";
+        yesBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-slate-800 border-slate-700 text-slate-400 hover:text-white";
+
+        container.classList.add('opacity-30', 'pointer-events-none');
+        lockWarning.classList.remove('hidden');
+        lockWarning.className = "bg-rose-950/90 border-2 border-rose-600 rounded-2xl p-6 text-center space-y-2 shadow-2xl";
+        lockIcon.className = "w-8 h-8 text-rose-400 mx-auto animate-bounce";
+        lockTitle.innerText = "Inspection Checklist Locked";
+        lockDesc.innerHTML = "Deep cleaning must be completed before proceeding with the full weekly inspection. Please change the Deep Cleaning status above to <strong class='text-emerald-400 font-extrabold underline'>YES ✅</strong> once the boat has been thoroughly cleaned.";
+        submitCard.classList.add('opacity-30', 'pointer-events-none');
+
+        if (notify) showToast('Deep cleaning set to NO - Inspection locked', 'alert-triangle', 'rose');
+      }
+
+      renderChecklist();
+      updateDashboardStats();
+      lucide.createIcons();
+    }
+
+    // --- STREAMING_CHUNK:Rendering neutral checklist items and dynamic state handlers... ---
+    function applyPresetDefaults(notify = true) {
+      currentInspection = {};
+      CHECKLIST_ITEMS.forEach(item => {
+        currentInspection[item.id] = {
+          status: null, // Neutral baseline state for items
+          remarks: ''
+        };
+      });
+
+      // Reset Deep Cleaning prerequisite back to NO baseline
+      setDeepCleaningStatus('no', false);
+
+      renderChecklist();
+      updateDashboardStats();
+      if (notify) {
+        showToast('Checklist reset. Deep cleaning defaulted to NO.', 'rotate-ccw');
+      }
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById('checklist-container');
+      container.innerHTML = '';
+
+      // Group by Category
+      const categories = {};
+      CHECKLIST_ITEMS.forEach(item => {
+        if (!categories[item.category]) categories[item.category] = [];
+        categories[item.category].push(item);
+      });
+
+      Object.keys(categories).forEach(catName => {
+        const catItems = categories[catName];
+        
+        // Filter active items
+        const visibleItems = catItems.filter(item => {
+          const st = currentInspection[item.id]?.status;
+          if (activeFilter === 'yes') return st === 'yes';
+          if (activeFilter === 'no') return st === 'no';
+          if (activeFilter === 'pending') return st === null || st === undefined || st === '';
+          return true;
+        });
+
+        if (visibleItems.length === 0) return;
+
+        // Category Box
+        const catCard = document.createElement('div');
+        catCard.className = 'bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3';
+
+        let rowsHtml = '';
+        visibleItems.forEach((item, idx) => {
+          const state = currentInspection[item.id] || { status: null, remarks: '' };
+          const isYes = state.status === 'yes';
+          const isNo = state.status === 'no';
+          const isNeutral = !isYes && !isNo;
+
+          let rowBg = 'border-slate-700/60 bg-slate-900/50';
+          if (isYes) rowBg = 'border-emerald-800/60 bg-emerald-950/20';
+          if (isNo) rowBg = 'border-rose-800/60 bg-rose-950/20';
+
+          rowsHtml += `
+            <div class="p-3.5 rounded-xl border ${rowBg} transition-all duration-200 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+              
+              <!-- Item Details -->
+              <div class="lg:w-1/3 flex items-start space-x-3">
+                <span class="text-xs font-extrabold text-slate-500 mt-0.5">${idx + 1}.</span>
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <span class="font-bold text-sm text-white">${item.name}</span>
+                    ${item.detail ? `<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-300 border border-slate-700/80">${item.detail}</span>` : ''}
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">${item.category}</p>
+                </div>
+              </div>
+
+              <!-- YES / NO Explicit Neutral Toggles -->
+              <div class="flex items-center space-x-2 shrink-0">
+                <span class="text-xs font-bold text-slate-400 mr-1 hidden sm:inline">Status:</span>
+                
+                <!-- YES BUTTON -->
+                <button onclick="setItemStatus('${item.id}', 'yes')" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 border ${isYes ? 'bg-emerald-600 border-emerald-500 text-white shadow-md shadow-emerald-600/30 ring-2 ring-emerald-400/30' : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800'}">
+                  <input type="radio" name="status-${item.id}" ${isYes ? 'checked' : ''} class="pointer-events-none accent-emerald-400">
+                  <span>YES ✅</span>
+                </button>
+
+                <!-- NO BUTTON -->
+                <button onclick="setItemStatus('${item.id}', 'no')" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 border ${isNo ? 'bg-rose-600 border-rose-500 text-white shadow-md shadow-rose-600/30 ring-2 ring-rose-400/30' : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800'}">
+                  <input type="radio" name="status-${item.id}" ${isNo ? 'checked' : ''} class="pointer-events-none accent-rose-400">
+                  <span>NO ❎</span>
+                </button>
+              </div>
+
+              <!-- REMARKS INPUT BOX -->
+              <div class="lg:w-2/5 w-full">
+                <div class="relative">
+                  <i data-lucide="message-square" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5"></i>
+                  <input type="text" 
+                         placeholder="Enter remarks / issue notes..." 
+                         value="${state.remarks || ''}" 
+                         onchange="updateItemRemarks('${item.id}', this.value)"
+                         onkeyup="updateItemRemarks('${item.id}', this.value)"
+                         class="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition placeholder:text-slate-600" />
+                </div>
+              </div>
+
+            </div>
+          `;
+        });
+
+        catCard.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-700/60 pb-2.5">
+            <h3 class="font-black text-sm text-cyan-300 uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="folder" class="w-4 h-4 text-cyan-400"></i>
+              ${catName}
+            </h3>
+            <span class="text-xs font-bold text-slate-400">${visibleItems.length} items</span>
+          </div>
+          <div class="space-y-2">
+            ${rowsHtml}
+          </div>
+        `;
+
+        container.appendChild(catCard);
+      });
+
+      lucide.createIcons();
+    }
+
+    // --- ITEM CONTROLS & STATE UPDATES ---
+    function setItemStatus(id, status) {
+      if (!currentInspection[id]) currentInspection[id] = { status: null, remarks: '' };
+      
+      // If clicking the already selected button, toggle back to neutral (null)
+      if (currentInspection[id].status === status) {
+        currentInspection[id].status = null;
+      } else {
+        currentInspection[id].status = status;
+      }
+
+      renderChecklist();
+      updateDashboardStats();
+    }
+
+    function updateItemRemarks(id, text) {
+      if (!currentInspection[id]) currentInspection[id] = { status: null, remarks: '' };
+      currentInspection[id].remarks = text;
+    }
+
+    function markAllYes() {
+      if (VESSEL_INFO.deepCleaned !== 'yes') {
+        showToast('Deep cleaning must be set to YES first!', 'alert-triangle', 'rose');
+        return;
+      }
+
+      CHECKLIST_ITEMS.forEach(item => {
+        if (!currentInspection[item.id]) currentInspection[item.id] = { status: null, remarks: '' };
+        currentInspection[item.id].status = 'yes';
+      });
+      renderChecklist();
+      updateDashboardStats();
+      showToast('Marked all items as YES (Passed)', 'check-circle', 'emerald');
+    }
+
+    function setFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-700', 'text-white');
+        btn.classList.add('text-slate-400');
+      });
+      const active = document.getElementById(`filter-${filter}`);
+      if (active) {
+        active.classList.add('bg-slate-700', 'text-white');
+        active.classList.remove('text-slate-400');
+      }
+      renderChecklist();
+    }
+
+    // --- STREAMING_CHUNK:Computing progress metrics and validation... ---
+    function updateDashboardStats() {
+      const total = CHECKLIST_ITEMS.length;
+      let yesCount = 0;
+      let noCount = 0;
+      let pendingCount = 0;
+
+      CHECKLIST_ITEMS.forEach(item => {
+        const st = currentInspection[item.id]?.status;
+        if (st === 'yes') yesCount++;
+        else if (st === 'no') noCount++;
+        else pendingCount++;
+      });
+
+      const checkedTotal = yesCount + noCount;
+      const pct = Math.round((checkedTotal / total) * 100);
+
+      document.getElementById('stat-total').innerText = total;
+      document.getElementById('stat-yes').innerText = yesCount;
+      document.getElementById('stat-no').innerText = noCount;
+      document.getElementById('stat-pending').innerText = pendingCount;
+
+      document.getElementById('filter-all').innerText = `All (${total})`;
+      document.getElementById('filter-pending').innerText = `Pending (${pendingCount})`;
+      document.getElementById('filter-yes').innerText = `Passed (${yesCount})`;
+      document.getElementById('filter-no').innerText = `Issues (${noCount})`;
+
+      document.getElementById('completion-percentage').innerText = `${pct}% Audited`;
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+    }
+
+    function saveInspectionReport() {
+      if (VESSEL_INFO.deepCleaned !== 'yes') {
+        showToast('Cannot save report: Deep cleaning must be set to YES', 'alert-triangle', 'rose');
+        return;
+      }
+
+      const vessel = document.getElementById('vessel-name').value.trim() || VESSEL_INFO.name;
+      const inspector = document.getElementById('inspector-name').value.trim();
+      const date = document.getElementById('inspection-date').value;
+      const shift = document.getElementById('inspection-shift').value;
+      const notes = document.getElementById('general-notes').value.trim();
+
+      if (!inspector) {
+        showToast('Please enter Inspector Name before saving', 'alert-circle', 'rose');
+        document.getElementById('inspector-name').focus();
+        return;
+      }
+
+      // Check if all items are answered (YES or NO)
+      const unanswered = CHECKLIST_ITEMS.filter(item => {
+        const st = currentInspection[item.id]?.status;
+        return st !== 'yes' && st !== 'no';
+      });
+
+      if (unanswered.length > 0) {
+        showToast(`Please select YES or NO for all items (${unanswered.length} remaining)`, 'alert-triangle', 'amber');
+        return;
+      }
+
+      const report = {
+        id: 'INS-' + Date.now(),
+        vessel: vessel,
+        licenseExp: VESSEL_INFO.licenseExp,
+        deepCleaned: VESSEL_INFO.deepCleaned,
+        inspector: inspector,
+        date: date,
+        shift: shift,
+        generalNotes: notes,
+        createdAt: new Date().toISOString(),
+        items: JSON.parse(JSON.stringify(currentInspection))
+      };
+
+      savedReports.unshift(report);
+      localStorage.setItem('voodoo10_inspections', JSON.stringify(savedReports));
+
+      updateHistoryBadge();
+      showToast(`Audit report saved for ${vessel}!`, 'check-circle', 'emerald');
+      openModal(report);
+    }
+
+    function loadSavedReports() {
+      try {
+        const stored = localStorage.getItem('voodoo10_inspections');
+        if (stored) savedReports = JSON.parse(stored);
+      } catch (e) {
+        savedReports = [];
+      }
+      updateHistoryBadge();
+    }
+
+    function updateHistoryBadge() {
+      document.getElementById('history-count-badge').innerText = savedReports.length;
+    }
+
+    // --- TAB SWITCHING ---
+    function switchTab(tab) {
+      const tabInspection = document.getElementById('tab-inspection');
+      const tabHistory = document.getElementById('tab-history');
+      const btnInspection = document.getElementById('nav-inspection-btn');
+      const btnHistory = document.getElementById('nav-history-btn');
+
+      if (tab === 'inspection') {
+        tabInspection.classList.remove('hidden');
+        tabHistory.classList.add('hidden');
+        btnInspection.className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center space-x-2 bg-cyan-600 text-white shadow-lg shadow-cyan-600/20";
+        btnHistory.className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center space-x-2 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700";
+      } else {
+        tabInspection.classList.add('hidden');
+        tabHistory.classList.remove('hidden');
+        btnHistory.className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center space-x-2 bg-cyan-600 text-white shadow-lg shadow-cyan-600/20";
+        btnInspection.className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center space-x-2 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700";
+        renderHistoryList();
+      }
+    }
+
+    // --- RENDER SAVED HISTORY RECORDS ---
+    function renderHistoryList() {
+      const container = document.getElementById('history-list');
+      container.innerHTML = '';
+
+      if (savedReports.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-slate-500">
+            <i data-lucide="clipboard" class="w-12 h-12 mx-auto mb-3 opacity-40"></i>
+            <p class="text-sm font-medium">No saved inspection records found.</p>
+            <p class="text-xs mt-1">Complete an inspection on the main tab and click 'Save & Generate Report'.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      savedReports.forEach((rep) => {
+        let yesCount = 0;
+        let noCount = 0;
+        Object.values(rep.items).forEach(it => {
+          if (it.status === 'yes') yesCount++;
+          if (it.status === 'no') noCount++;
+        });
+
+        const card = document.createElement('div');
+        card.className = "bg-slate-900 border border-slate-700/80 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-slate-600 transition shadow";
+
+        card.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-white text-base">${rep.vessel || 'Voodoo 10'}</span>
+              <span class="text-xs px-2.5 py-0.5 rounded bg-slate-800 text-cyan-300 font-mono font-bold">${rep.date} (${rep.shift})</span>
+              ${rep.deepCleaned === 'yes' ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">DEEP CLEANED</span>' : ''}
+            </div>
+            <p class="text-xs text-slate-400">Inspector: <span class="text-slate-200 font-semibold">${rep.inspector}</span></p>
+            ${rep.generalNotes ? `<p class="text-xs text-slate-400 italic line-clamp-1">"${rep.generalNotes}"</p>` : ''}
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2 text-xs font-bold">
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-400 border border-emerald-800/60">
+                ✅ ${yesCount} Passed
+              </span>
+              <span class="px-2.5 py-1 rounded-lg bg-rose-950 text-rose-400 border border-rose-800/60">
+                ❎ ${noCount} Issues
+              </span>
+            </div>
+
+            <div class="flex items-center space-x-1">
+              <button onclick='viewSavedReport("${rep.id}")' class="p-2 bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 rounded-lg border border-cyan-800/60 transition" title="View / Print Sheet">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+              </button>
+              <button onclick='deleteReport("${rep.id}")' class="p-2 bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-400 rounded-lg transition" title="Delete">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function viewSavedReport(reportId) {
+      const rep = savedReports.find(r => r.id === reportId);
+      if (rep) openModal(rep);
+    }
+
+    function deleteReport(reportId) {
+      savedReports = savedReports.filter(r => r.id !== reportId);
+      localStorage.setItem('voodoo10_inspections', JSON.stringify(savedReports));
+      renderHistoryList();
+      updateHistoryBadge();
+      showToast('Record deleted', 'trash-2');
+    }
+
+    function clearHistory() {
+      if (savedReports.length === 0) return;
+      savedReports = [];
+      localStorage.removeItem('voodoo10_inspections');
+      renderHistoryList();
+      updateHistoryBadge();
+      showToast('All inspection records cleared', 'check');
+    }
+
+    function exportAllDataJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedReports, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `vessel_inspections_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    // --- STREAMING_CHUNK:Building printable report modal... ---
+    function openModal(report) {
+      const modal = document.getElementById('report-modal');
+      const content = document.getElementById('modal-content');
+
+      let yesCount = 0;
+      let noCount = 0;
+      Object.values(report.items).forEach(it => {
+        if (it.status === 'yes') yesCount++;
+        if (it.status === 'no') noCount++;
+      });
+
+      let itemsRowsHtml = '';
+      CHECKLIST_ITEMS.forEach((item, index) => {
+        const itemState = report.items[item.id] || {};
+        const isYes = itemState.status === 'yes';
+        const isNo = itemState.status === 'no';
+
+        itemsRowsHtml += `
+          <tr class="border-b border-slate-700/50 text-xs">
+            <td class="py-2 px-3 font-semibold text-slate-300 print-text-dark">${index + 1}. ${item.name}</td>
+            <td class="py-2 px-3 text-slate-400 font-mono print-text-dark">${item.detail || '-'}</td>
+            <td class="py-2 px-3 font-bold">
+              ${isYes ? '<span class="text-emerald-400">✅ YES</span>' : ''}
+              ${isNo ? '<span class="text-rose-400">❎ NO</span>' : ''}
+              ${!isYes && !isNo ? '<span class="text-amber-400">UNCHECKED</span>' : ''}
+            </td>
+            <td class="py-2 px-3 text-slate-300 italic print-text-dark">${itemState.remarks || '-'}</td>
+          </tr>
+        `;
+      });
+
+      const reportLicenseExp = formatDateString(report.licenseExp || VESSEL_INFO.licenseExp);
+
+      content.innerHTML = `
+        <div class="border-b border-slate-700 pb-4 flex justify-between items-start">
+          <div>
+            <h2 class="text-2xl font-black uppercase tracking-tight text-white print-text-dark">BOAT WEEKLY INSPECTION SHEET</h2>
+            <p class="text-xs font-bold text-cyan-400 mt-1">Boat Name: ${report.vessel} | License Exp: ${reportLicenseExp}</p>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 print-text-dark">Date & Shift:</p>
+            <p class="text-sm font-black text-white print-text-dark">${report.date} (${report.shift})</p>
+          </div>
+        </div>
+
+        <!-- Prerequisite Banner in Report -->
+        <div class="p-3 bg-emerald-950/60 border border-emerald-800/80 rounded-xl flex justify-between items-center text-xs text-emerald-300 print-card">
+          <span class="font-bold flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> Boat Deep Cleaning Status:
+          </span>
+          <span class="font-black px-2.5 py-0.5 rounded bg-emerald-900 border border-emerald-700">COMPLETED & VERIFIED (YES)</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-700/60 print-card">
+          <div>
+            <p class="text-[10px] text-slate-400 uppercase font-bold print-text-dark">Inspector</p>
+            <p class="text-xs font-bold text-white mt-0.5 print-text-dark">${report.inspector}</p>
+          </div>
+          <div>
+            <p class="text-[10px] text-slate-400 uppercase font-bold print-text-dark">Total Checked YES</p>
+            <p class="text-xs font-extrabold text-emerald-400 mt-0.5">${yesCount} Passed</p>
+          </div>
+          <div>
+            <p class="text-[10px] text-slate-400 uppercase font-bold print-text-dark">Total Checked NO</p>
+            <p class="text-xs font-extrabold text-rose-400 mt-0.5">${noCount} Flagged</p>
+          </div>
+          <div>
+            <p class="text-[10px] text-slate-400 uppercase font-bold print-text-dark">Reference Ref</p>
+            <p class="text-xs font-mono text-slate-300 mt-0.5 print-text-dark">${report.id}</p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 print-text-dark">Detailed Check Items</h4>
+          <div class="overflow-x-auto rounded-xl border border-slate-700/60 bg-slate-900/40 print-card">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-900 border-b border-slate-700 text-[11px] text-slate-400 uppercase font-bold print-text-dark">
+                  <th class="py-2.5 px-3">Item Name</th>
+                  <th class="py-2.5 px-3">Baseline / Scope</th>
+                  <th class="py-2.5 px-3">Check Status</th>
+                  <th class="py-2.5 px-3">Remarks / Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsRowsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        ${report.generalNotes ? `
+          <div class="bg-slate-900/60 border border-slate-700/60 rounded-xl p-3 print-card">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 print-text-dark">General Remarks / Maintenance Notes</h4>
+            <p class="text-xs text-slate-200 print-text-dark">${report.generalNotes}</p>
+          </div>
+        ` : ''}
+
+        <div class="pt-8 border-t border-slate-700 grid grid-cols-2 gap-8 text-xs text-slate-400 print-text-dark">
+          <div>
+            <p class="font-bold">Inspector Signature: _______________________</p>
+          </div>
+          <div>
+            <p class="font-bold">Supervisor Sign-off: _______________________</p>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeModal() {
+      document.getElementById('report-modal').classList.add('hidden');
+    }
+
+    // Toast Notification helper
+    function showToast(message, iconName = 'info', color = 'cyan') {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-message');
+      const iconContainer = document.getElementById('toast-icon');
+
+      msg.innerText = message;
+      iconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-5 h-5"></i>`;
+      lucide.createIcons();
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
+```
