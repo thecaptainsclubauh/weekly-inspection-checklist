@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> AUH Boats Weekly Inspection Checklist</title>
+  <title>Boat Weekly Inspection Checklist - AUH Fleet</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -12,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
     body { font-family: 'Inter', sans-serif; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -62,7 +64,7 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
-        <span id="cloud-status-text">Cloud Sync Live</span>
+        <span id="cloud-status-text">AUH Fleet Sync</span>
       </div>
     </div>
   </header>
@@ -72,7 +74,6 @@
     <!-- TAB 1: ACTIVE INSPECTION -->
     <div id="tab-inspection" class="space-y-6">
 
-      <!-- PREREQUISITE GATEKEEPER: DEEP CLEANING BANNER -->
       <div id="deep-clean-card" class="rounded-2xl p-5 border shadow-2xl transition-all bg-slate-800/80 border-slate-700 relative overflow-hidden">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
           
@@ -127,7 +128,6 @@
                   <div class="relative">
                     <i data-lucide="anchor" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3 z-10"></i>
                     <select id="vessel-name" onchange="handleBoatChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-8 pr-2 py-2 text-xs font-bold text-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition cursor-pointer">
-                      <option value="VOODOO 10" selected>VOODOO 10</option>
                       <option value="GULFCRAFT 31">GULFCRAFT 31</option>
                       <option value="ASM 1">ASM 1</option>
                       <option value="ASM 2">ASM 2</option>
@@ -143,6 +143,7 @@
                       <option value="DINO 9">DINO 9</option>
                       <option value="VOODOO 4">VOODOO 4</option>
                       <option value="VOODOO 9">VOODOO 9</option>
+                      <option value="VOODOO 10" selected>VOODOO 10</option>
                       <option value="PHENOM 11">PHENOM 11</option>
                       <option value="PHENOM 17">PHENOM 17</option>
                       <option value="SEARAY 3">SEARAY 3</option>
@@ -181,7 +182,7 @@
                     <span>License Expiry</span>
                     <span id="license-expiry-status" class="hidden text-[10px] font-bold px-1.5 py-0.5 rounded"></span>
                   </label>
-                  <input type="date" id="license-exp-date" value="2026-08-02" onchange="updateVesselIdentity()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2 py-2 text-xs text-amber-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" />
+                  <input type="date" id="license-exp-date" value="" onchange="updateVesselIdentity()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2 py-2 text-xs text-amber-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" />
                 </div>
               </div>
 
@@ -212,7 +213,7 @@
 
           <div id="license-status-tag" class="pt-3 border-t border-slate-700/60 flex justify-between items-center text-xs text-slate-400">
             <span>Selected Boat: <strong id="vessel-display-tag" class="text-white font-bold">VOODOO 10</strong></span>
-            <span>License Exp: <strong id="license-display-tag" class="text-amber-400 font-bold">02/08/2026</strong></span>
+            <span>License Exp: <strong id="license-display-tag" class="text-amber-400 font-bold">dd/mm/yyyy</strong></span>
           </div>
         </div>
 
@@ -244,27 +245,26 @@
               </div>
               <div class="bg-rose-950/40 border border-rose-800/50 rounded-xl p-3 text-center shadow">
                 <p class="text-xs text-rose-400 font-bold">Issues (❎)</p>
-                <p id="stat-no" class="text-2xl font-black text-rose-400 mt-0.5">0</p>
+                <p id="stat-no" class="text-2xl font-black text-rose-400 mt-0.5">1</p>
               </div>
               <div class="bg-amber-950/40 border border-amber-800/50 rounded-xl p-3 text-center shadow">
                 <p class="text-xs text-amber-400 font-bold">Unchecked / Pending</p>
-                <p id="stat-pending" class="text-2xl font-black text-amber-400 mt-0.5">25</p>
+                <p id="stat-pending" class="text-2xl font-black text-amber-400 mt-0.5">23</p>
               </div>
             </div>
           </div>
 
-          <!-- Quick Actions & Filters -->
           <div class="mt-4 pt-3 border-t border-slate-700/60 flex flex-wrap gap-2 items-center justify-between">
             <div class="flex flex-wrap gap-1">
-              <button onclick="setFilter('all')" id="filter-all" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition bg-slate-700 text-white">All (25)</button>
-              <button onclick="setFilter('pending')" id="filter-pending" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition text-slate-400 hover:bg-slate-700">Pending (25)</button>
+              <button onclick="setFilter('all')" id="filter-all" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition bg-slate-700 text-white">All (23)</button>
+              <button onclick="setFilter('pending')" id="filter-pending" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition text-slate-400 hover:bg-slate-700">Pending (23)</button>
               <button onclick="setFilter('yes')" id="filter-yes" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition text-slate-400 hover:bg-slate-700">Passed (YES)</button>
               <button onclick="setFilter('no')" id="filter-no" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold transition text-slate-400 hover:bg-slate-700">Issues (NO)</button>
             </div>
             
             <div class="flex space-x-2">
               <button onclick="applyPresetDefaults()" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 font-semibold transition flex items-center gap-1.5 shadow">
-                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset to Unselected
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset Items
               </button>
               <button onclick="markAllYes()" class="text-xs px-3 py-1.5 rounded-lg bg-emerald-900/60 text-emerald-300 hover:bg-emerald-800/80 border border-emerald-700/60 font-semibold transition flex items-center gap-1.5 shadow">
                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Mark All YES
@@ -283,12 +283,10 @@
         </p>
       </div>
 
-      <!-- Checklist Items Container -->
       <div id="checklist-container" class="space-y-4 transition-all duration-300 opacity-30 pointer-events-none">
         <!-- Categories and items loaded dynamically via JS -->
       </div>
 
-      <!-- General Remarks & Submit Card -->
       <div id="submit-card" class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-xl space-y-4 opacity-30 pointer-events-none">
         <div>
           <label class="block text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
@@ -300,7 +298,7 @@
 
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
           <p class="text-xs text-slate-400">
-            * All 25 checklist items must be checked (YES or NO) before generating the report.
+            * All checklist items must be evaluated (YES or NO) before generating the final report.
           </p>
           <div class="flex space-x-3 w-full sm:w-auto">
             <button onclick="saveInspectionReport()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-extrabold rounded-xl shadow-lg shadow-cyan-600/30 transition flex items-center justify-center space-x-2">
@@ -313,7 +311,6 @@
 
     </div>
 
-    <!-- TAB 2: SAVED INSPECTION HISTORY -->
     <div id="tab-history" class="hidden space-y-6">
       <!-- Shared Fleet Sync Bar -->
       <div class="bg-slate-800/90 border border-cyan-800/60 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
@@ -324,7 +321,7 @@
           <div>
             <h3 class="text-sm font-black text-white flex items-center gap-2">
               Team Cloud Database Sync
-              <span class="text-[10px] px-2 py-0.5 bg-cyan-950 text-cyan-300 border border-cyan-800 rounded font-mono">Shared Fleet Mode</span>
+              <span class="text-[10px] px-2 py-0.5 bg-cyan-950 text-cyan-300 border border-cyan-800 rounded font-mono">AUH FLEET</span>
             </h3>
             <p class="text-xs text-slate-400 mt-0.5">Inspections saved on any smartphone or tablet are automatically archived here for all colleagues.</p>
           </div>
@@ -333,10 +330,10 @@
         <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
           <div class="flex items-center space-x-1.5 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">
             <span class="text-[11px] font-bold text-slate-400">Sync Channel:</span>
-            <input type="text" id="sync-channel-id" value="VOODOO10-FLEET" onchange="updateSyncChannel(this.value)" class="bg-transparent text-xs font-mono font-bold text-cyan-300 focus:outline-none w-32" title="Team Channel Key" />
+            <input type="text" id="sync-channel-id" value="auh-fleet-data" onchange="updateSyncChannel(this.value)" class="bg-transparent text-xs font-mono font-bold text-cyan-300 focus:outline-none w-36" title="Team Channel Key" />
           </div>
 
-          <button onclick="fetchCloudReports(true)" class="px-3.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white rounded-xl transition flex items-center space-x-1.5 shadow">
+          <button onclick="fetchCloudReports(true)" class="px-3.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white rounded-xl transition flex items-center space-x-1.5 shadow active:scale-95">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="sync-spin-icon"></i>
             <span>Sync Now</span>
           </button>
@@ -371,7 +368,6 @@
     </div>
   </main>
 
-  <!-- Inspection Details / Printable Modal -->
   <div id="report-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6 hidden">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden print-card">
       
@@ -379,7 +375,7 @@
       <div class="no-print p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
         <div class="flex items-center space-x-2">
           <i data-lucide="file-check" class="w-5 h-5 text-cyan-400"></i>
-          <h3 class="font-bold text-white text-base">Weekly Marine Inspection Summary Sheet</h3>
+          <h3 class="font-bold text-white text-base">Weekly Boats Inspection Summary Sheet</h3>
         </div>
         <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -407,7 +403,6 @@
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
   <div id="toast" class="fixed bottom-5 right-5 z-50 flex items-center space-x-3 bg-slate-800 border border-cyan-500/50 text-white px-4 py-3 rounded-xl shadow-2xl transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
     <div id="toast-icon" class="text-cyan-400">
       <i data-lucide="info" class="w-5 h-5"></i>
@@ -416,21 +411,11 @@
   </div>
 
   <script>
-    // --- MASTER DATA & CONFIGURATION ---
     let VESSEL_INFO = {
       name: "VOODOO 10",
-      licenseExp: "2026-08-02",
-      deepCleaned: "no" // Defaults strictly to NO
+      licenseExp: "",
+      deepCleaned: "no" // Prerequisite defaults to NO
     };
-
-    function formatDateString(dateStr) {
-      if (!dateStr) return 'dd/mm/yyyy';
-      const parts = dateStr.split('-');
-      if (parts.length === 3) {
-        return `${parts[2]}/${parts[1]}/${parts[0]}`;
-      }
-      return dateStr;
-    }
 
     const CHECKLIST_ITEMS = [
       { id: 'stainless_polished', category: 'Deck & Hull Hardware', name: 'Stainless polished', detail: 'Check all railings, cleats & fittings polished' },
@@ -463,158 +448,202 @@
     let currentFilter = 'all';
 
     let CLOUD_ENDPOINT_URL = 'https://jsonblob.com/api/jsonBlob/';
-    let CLOUD_SYNC_CHANNEL = '12345678-voodoo10-fleet-data';
+    let CLOUD_SYNC_CHANNEL = localStorage.getItem('voodoo10_sync_channel') || 'auh-fleet-data';
 
-    window.onload = function() {
-      // Set initial date defaults
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('inspection-date').value = today;
+    let syncBroadcastChannel = null;
+    try {
+      syncBroadcastChannel = new BroadcastChannel('auh_fleet_channel');
+      syncBroadcastChannel.onmessage = (event) => {
+        if (event.data && event.data.type === 'REPORTS_UPDATED') {
+          loadSavedReports();
+          if (!document.getElementById('tab-history').classList.contains('hidden')) {
+            renderHistoryList();
+          }
+        }
+      };
+    } catch (e) {
+      console.log('BroadcastChannel not available in this browser');
+    }
 
-      initInspectionState();
-      loadSavedReports();
-      renderChecklist();
-      updateVesselIdentity();
-      updateDashboardStats();
+    function notifyLocalTabs() {
+      if (syncBroadcastChannel) {
+        try {
+          syncBroadcastChannel.postMessage({ type: 'REPORTS_UPDATED' });
+        } catch (e) {
+          console.log('Broadcast error:', e);
+        }
+      }
+    }
 
-      // Lucide icons render
-      lucide.createIcons();
+    function formatDateString(dateStr) {
+      if (!dateStr) return 'dd/mm/yyyy';
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      }
+      return dateStr;
+    }
 
-      // Fetch shared database
-      fetchCloudReports();
-    };
-
-    function isLicenseExpiredDate(expDate) {
-      if (!expDate) return false;
+    function isLicenseExpiredDate(dateStr) {
+      if (!dateStr) return false;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      const parsedExp = new Date(expDate + 'T00:00:00');
-      return parsedExp < today;
+      const expDate = new Date(dateStr);
+      expDate.setHours(0, 0, 0, 0);
+      return expDate < today;
+    }
+
+    function initInspectionState() {
+      currentInspection = {};
+      CHECKLIST_ITEMS.forEach(item => {
+        currentInspection[item.id] = {
+          status: null, // Neutral unselected baseline
+          remarks: ''
+        };
+      });
+      renderChecklist();
+      updateDashboardStats();
+    }
+
+    function handleBoatChange() {
+      const selectEl = document.getElementById('vessel-name');
+      if (selectEl) {
+        VESSEL_INFO.name = selectEl.value;
+      }
+      
+      // Clear Inspector Name
+      const inspectorInput = document.getElementById('inspector-name');
+      if (inspectorInput) inspectorInput.value = '';
+
+      // Clear License Expiry
+      const dateInput = document.getElementById('license-exp-date');
+      if (dateInput) dateInput.value = '';
+
+      // Clear General Notes
+      const notesInput = document.getElementById('general-notes');
+      if (notesInput) notesInput.value = '';
+
+      // Reset Deep Cleaning Prerequisite back to NO
+      setDeepCleaningStatus('no');
+
+      // Reset checklist items to clean state
+      initInspectionState();
+      updateVesselIdentity();
+
+      showToast(`Selected ${VESSEL_INFO.name}. Inspector & fields reset!`, 'rotate-ccw', 'cyan');
+    }
+
+    function updateVesselIdentity() {
+      const nameSelect = document.getElementById('vessel-name');
+      if (nameSelect) VESSEL_INFO.name = nameSelect.value;
+
+      const dateInput = document.getElementById('license-exp-date');
+      if (dateInput) VESSEL_INFO.licenseExp = dateInput.value;
+
+      const headerVessel = document.getElementById('header-vessel-name');
+      if (headerVessel) headerVessel.innerText = VESSEL_INFO.name;
+
+      const displayTag = document.getElementById('vessel-display-tag');
+      if (displayTag) displayTag.innerText = VESSEL_INFO.name;
+
+      const licTag = document.getElementById('license-display-tag');
+      const licStatusBadge = document.getElementById('license-expiry-status');
+      
+      const isExpired = isLicenseExpiredDate(VESSEL_INFO.licenseExp);
+
+      if (dateInput) {
+        if (isExpired) {
+          dateInput.className = "w-full bg-slate-900 border-2 border-rose-500 rounded-xl px-2 py-2 text-xs text-rose-300 font-bold focus:outline-none focus:ring-2 focus:ring-rose-500 transition animate-pulse";
+        } else {
+          dateInput.className = "w-full bg-slate-900 border border-slate-700 rounded-xl px-2 py-2 text-xs text-amber-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition";
+        }
+      }
+
+      if (licStatusBadge) {
+        if (VESSEL_INFO.licenseExp === '') {
+          licStatusBadge.className = "hidden";
+        } else if (isExpired) {
+          licStatusBadge.className = "text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800 animate-pulse";
+          licStatusBadge.innerText = "EXPIRED 🚨";
+        } else {
+          licStatusBadge.className = "text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800";
+          licStatusBadge.innerText = "VALID ✅";
+        }
+      }
+
+      if (licTag) {
+        if (VESSEL_INFO.licenseExp === '') {
+          licTag.innerText = "dd/mm/yyyy";
+          licTag.className = "text-amber-400 font-bold";
+        } else if (isExpired) {
+          licTag.innerText = `${formatDateString(VESSEL_INFO.licenseExp)} (EXPIRED 🚨)`;
+          licTag.className = "text-rose-400 font-extrabold";
+        } else {
+          licTag.innerText = formatDateString(VESSEL_INFO.licenseExp);
+          licTag.className = "text-emerald-400 font-bold";
+        }
+      }
+
+      updateDashboardStats();
     }
 
     function setDeepCleaningStatus(status) {
       VESSEL_INFO.deepCleaned = status;
-      const card = document.getElementById('deep-clean-card');
-      const badge = document.getElementById('deep-clean-badge');
-      const msg = document.getElementById('deep-clean-msg');
+
       const yesBtn = document.getElementById('dc-yes-btn');
       const noBtn = document.getElementById('dc-no-btn');
+      const badge = document.getElementById('deep-clean-badge');
+      const msg = document.getElementById('deep-clean-msg');
+      const card = document.getElementById('deep-clean-card');
       const iconBg = document.getElementById('deep-clean-icon-bg');
       const warningBanner = document.getElementById('locked-checklist-warning');
       const checklistContainer = document.getElementById('checklist-container');
       const submitCard = document.getElementById('submit-card');
 
       if (status === 'yes') {
-        if (card) card.className = "rounded-2xl p-5 border shadow-2xl transition-all bg-emerald-950/40 border-emerald-700/80 relative overflow-hidden";
+        if (yesBtn) yesBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-900/40";
+        if (noBtn) noBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-slate-800 border-slate-700 text-slate-400 hover:text-white";
+        
         if (badge) {
-          badge.className = "text-xs font-black px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800";
-          badge.innerText = "DONE ✅";
+          badge.innerText = "COMPLETED ✅";
+          badge.className = "text-xs font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800";
         }
         if (msg) {
-          msg.innerText = "✅ Deep cleaning verified. Full inspection checklist is now UNLOCKED.";
+          msg.innerText = "✅ Prerequisite verified: Boat is deep cleaned. Inspection checklist unlocked.";
           msg.className = "text-xs text-emerald-300 mt-0.5 font-medium";
         }
-        if (yesBtn) yesBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-900/40 scale-105";
-        if (noBtn) noBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-slate-800 border-slate-700 text-slate-400 hover:text-white";
-        if (iconBg) iconBg.className = "p-3 rounded-2xl bg-emerald-900/60 text-emerald-400 border border-emerald-700 shrink-0";
+        if (card) card.className = "rounded-2xl p-5 border shadow-2xl transition-all bg-emerald-950/20 border-emerald-800/80 relative overflow-hidden";
+        if (iconBg) iconBg.className = "p-3 rounded-2xl bg-emerald-900/50 text-emerald-400 border border-emerald-700 shrink-0";
+
         if (warningBanner) warningBanner.classList.add('hidden');
-        if (checklistContainer) checklistContainer.className = "space-y-4 transition-all duration-300 opacity-100 pointer-events-auto";
-        if (submitCard) submitCard.className = "bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-xl space-y-4 opacity-100 pointer-events-auto";
+        if (checklistContainer) {
+          checklistContainer.classList.remove('opacity-30', 'pointer-events-none');
+        }
+        if (submitCard) {
+          submitCard.classList.remove('opacity-30', 'pointer-events-none');
+        }
+        showToast('Deep cleaning verified! Checklist unlocked.', 'check-circle', 'emerald');
       } else {
-        if (card) card.className = "rounded-2xl p-5 border shadow-2xl transition-all bg-slate-800/80 border-slate-700 relative overflow-hidden";
+        if (noBtn) noBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-900/40";
+        if (yesBtn) yesBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-slate-800 border-slate-700 text-slate-400 hover:text-white";
+
         if (badge) {
-          badge.className = "text-xs font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800";
           badge.innerText = "NOT DONE ❎";
+          badge.className = "text-xs font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800";
         }
         if (msg) {
           msg.innerText = "🚨 Deep cleaning must be completed (YES) before proceeding with the weekly inspection.";
           msg.className = "text-xs text-rose-200 mt-0.5 font-medium";
         }
-        if (yesBtn) yesBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-slate-800 border-slate-700 text-slate-400 hover:text-white";
-        if (noBtn) noBtn.className = "px-4 py-2 rounded-lg text-xs font-black transition flex items-center space-x-1.5 border bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-900/40 scale-105";
+        if (card) card.className = "rounded-2xl p-5 border shadow-2xl transition-all bg-slate-800/80 border-slate-700 relative overflow-hidden";
         if (iconBg) iconBg.className = "p-3 rounded-2xl bg-slate-700/50 text-slate-400 border border-slate-600 shrink-0";
+
         if (warningBanner) warningBanner.classList.remove('hidden');
-        if (checklistContainer) checklistContainer.className = "space-y-4 transition-all duration-300 opacity-30 pointer-events-none";
-        if (submitCard) submitCard.className = "bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-xl space-y-4 opacity-30 pointer-events-none";
-      }
-
-      updateDashboardStats();
-    }
-
-    function handleBoatChange() {
-      // Reset License Expiry Date input field
-      const expInput = document.getElementById('license-exp-date');
-      if (expInput) expInput.value = '';
-
-      updateVesselIdentity();
-      applyPresetDefaults();
-      setDeepCleaningStatus('no');
-
-      // Clear Inspector Name & General Notes input fields
-      const inspectorInput = document.getElementById('inspector-name');
-      if (inspectorInput) inspectorInput.value = '';
-
-      const notesInput = document.getElementById('general-notes');
-      if (notesInput) notesInput.value = '';
-
-      showToast(`Boat changed to ${VESSEL_INFO.name}. License expiry date & fields reset.`, 'rotate-ccw', 'cyan');
-    }
-
-    function initInspectionState() {
-      currentInspection = {};
-      CHECKLIST_ITEMS.forEach(item => {
-        // Default ALL items to neutral null state
-        currentInspection[item.id] = { status: null, remarks: '' };
-      });
-    }
-
-    function updateVesselIdentity() {
-      const selectedVessel = document.getElementById('vessel-name').value;
-      const expDate = document.getElementById('license-exp-date').value;
-
-      VESSEL_INFO.name = selectedVessel;
-      VESSEL_INFO.licenseExp = expDate;
-
-      document.getElementById('header-vessel-name').innerText = selectedVessel;
-      document.getElementById('vessel-display-tag').innerText = selectedVessel;
-
-      const expInput = document.getElementById('license-exp-date');
-      const expBadge = document.getElementById('license-expiry-status');
-      const licenseTag = document.getElementById('license-display-tag');
-
-      if (!expDate) {
-        expInput.className = "w-full bg-slate-900 border border-slate-700 rounded-xl px-2 py-2 text-xs text-amber-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition";
-        if (expBadge) {
-          expBadge.className = "hidden text-[10px] font-bold px-1.5 py-0.5 rounded";
+        if (checklistContainer) {
+          checklistContainer.classList.add('opacity-30', 'pointer-events-none');
         }
-        if (licenseTag) {
-          licenseTag.className = "text-slate-400 font-bold";
-          licenseTag.innerText = "dd/mm/yyyy";
-        }
-      } else {
-        const isExpired = isLicenseExpiredDate(expDate);
-
-        if (isExpired) {
-          expInput.className = "w-full bg-rose-950/60 border-2 border-rose-500 rounded-xl px-2 py-2 text-xs text-rose-200 font-bold focus:outline-none focus:ring-2 focus:ring-rose-500 transition shadow-lg shadow-rose-950/50";
-          if (expBadge) {
-            expBadge.innerText = "EXPIRED 🚨 (ISSUE)";
-            expBadge.className = "text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800 animate-pulse";
-            expBadge.classList.remove('hidden');
-          }
-          if (licenseTag) {
-            licenseTag.className = "text-rose-400 font-black";
-            licenseTag.innerText = `${formatDateString(expDate)} (EXPIRED 🚨)`;
-          }
-        } else {
-          expInput.className = "w-full bg-slate-900 border border-slate-700 rounded-xl px-2 py-2 text-xs text-amber-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition";
-          if (expBadge) {
-            expBadge.innerText = "VALID ✅";
-            expBadge.className = "text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800";
-            expBadge.classList.remove('hidden');
-          }
-          if (licenseTag) {
-            licenseTag.className = "text-amber-400 font-bold";
-            licenseTag.innerText = formatDateString(expDate);
-          }
+        if (submitCard) {
+          submitCard.classList.add('opacity-30', 'pointer-events-none');
         }
       }
 
@@ -623,109 +652,91 @@
 
     function renderChecklist() {
       const container = document.getElementById('checklist-container');
+      if (!container) return;
       container.innerHTML = '';
 
-      // Group by Category
+      // Group checklist items by category
       const categories = {};
       CHECKLIST_ITEMS.forEach(item => {
         if (!categories[item.category]) categories[item.category] = [];
         categories[item.category].push(item);
       });
 
-      let itemCounter = 0;
-
       Object.keys(categories).forEach(catName => {
+        const catItems = categories[catName];
+        
+        // Apply filter
+        const visibleItems = catItems.filter(item => {
+          const st = currentInspection[item.id]?.status;
+          if (currentFilter === 'pending') return st !== 'yes' && st !== 'no';
+          if (currentFilter === 'yes') return st === 'yes';
+          if (currentFilter === 'no') return st === 'no';
+          return true; // 'all'
+        });
+
+        if (visibleItems.length === 0) return;
+
         const catCard = document.createElement('div');
-        catCard.className = "bg-slate-800/70 border border-slate-700/60 rounded-2xl overflow-hidden shadow-lg backdrop-blur";
+        catCard.className = "bg-slate-800/80 border border-slate-700/60 rounded-2xl overflow-hidden shadow-xl";
 
-        let itemsHtml = '';
-        categories[catName].forEach(item => {
-          itemCounter++;
-          const itemState = currentInspection[item.id] || { status: null, remarks: '' };
+        let itemsHtml = visibleItems.map(item => {
+          const state = currentInspection[item.id] || { status: null, remarks: '' };
+          const isYes = state.status === 'yes';
+          const isNo = state.status === 'no';
 
-          // Filter evaluation
-          let isVisible = true;
-          if (currentFilter === 'yes' && itemState.status !== 'yes') isVisible = false;
-          if (currentFilter === 'no' && itemState.status !== 'no') isVisible = false;
-          if (currentFilter === 'pending' && itemState.status !== null) isVisible = false;
-
-          if (!isVisible) return;
-
-          const isYes = itemState.status === 'yes';
-          const isNo = itemState.status === 'no';
-          const isPending = itemState.status === null;
-
-          itemsHtml += `
-            <div id="item-row-${item.id}" class="p-4 border-b border-slate-700/40 last:border-0 hover:bg-slate-700/20 transition flex flex-col md:flex-row md:items-center justify-between gap-4 ${isNo ? 'bg-rose-950/10' : ''}">
-              
-              <!-- Item Info -->
-              <div class="space-y-1 max-w-lg">
+          return `
+            <div id="item-row-${item.id}" class="p-4 border-b border-slate-700/50 last:border-b-0 hover:bg-slate-800/50 transition flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div class="flex-grow space-y-0.5">
                 <div class="flex items-center space-x-2">
-                  <span class="text-xs font-mono font-bold text-slate-400">#${itemCounter}</span>
                   <h4 class="text-sm font-bold text-white">${item.name}</h4>
-                  ${isYes ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">PASSED ✅</span>' : ''}
-                  ${isNo ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800">ISSUE ❎</span>' : ''}
-                  ${isPending ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-800/60">PENDING ⏳</span>' : ''}
+                  ${isYes ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">Passed</span>' : ''}
+                  ${isNo ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800">Issue</span>' : ''}
+                  ${!isYes && !isNo ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-400 border border-amber-800/80">Pending</span>' : ''}
                 </div>
-                <p class="text-xs text-slate-400">${item.detail}</p>
+                <p class="text-xs text-slate-400">${item.detail || ''}</p>
               </div>
 
-              <!-- Controls: YES/NO Toggles & Remarks Input -->
-              <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 shrink-0">
-                
-                <!-- Remarks Input Box -->
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
+                <!-- Remarks Input -->
                 <input type="text" 
-                  id="remarks-${item.id}"
-                  value="${itemState.remarks || ''}" 
-                  onchange="updateRemarks('${item.id}', this.value)"
-                  placeholder="Add remarks / notes..." 
-                  class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 w-full sm:w-48 transition"
-                />
+                       id="remark-${item.id}" 
+                       placeholder="Remarks / comments..." 
+                       value="${state.remarks || ''}"
+                       oninput="updateRemark('${item.id}', this.value)"
+                       class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 w-full sm:w-48 placeholder:text-slate-600" />
 
-                <!-- YES / NO Buttons -->
-                <div class="flex space-x-1.5 shrink-0">
-                  <button type="button" 
-                    onclick="setItemStatus('${item.id}', 'yes')" 
-                    class="px-3.5 py-1.5 rounded-xl text-xs font-black transition flex items-center space-x-1 border ${isYes ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-900/40 scale-105' : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-emerald-400'}">
+                <!-- YES / NO Toggle Buttons -->
+                <div class="flex space-x-1 shrink-0">
+                  <button onclick="setItemStatus('${item.id}', 'yes')" type="button" 
+                          class="px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition flex items-center space-x-1 border ${isYes ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-900/40' : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white'}">
                     <i data-lucide="check" class="w-3.5 h-3.5"></i>
                     <span>YES ✅</span>
                   </button>
 
-                  <button type="button" 
-                    onclick="setItemStatus('${item.id}', 'no')" 
-                    class="px-3.5 py-1.5 rounded-xl text-xs font-black transition flex items-center space-x-1 border ${isNo ? 'bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-900/40 scale-105' : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-rose-400'}">
+                  <button onclick="setItemStatus('${item.id}', 'no')" type="button" 
+                          class="px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition flex items-center space-x-1 border ${isNo ? 'bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-900/40' : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white'}">
                     <i data-lucide="x" class="w-3.5 h-3.5"></i>
                     <span>NO ❎</span>
                   </button>
                 </div>
-
               </div>
             </div>
           `;
-        });
+        }).join('');
 
-        if (itemsHtml.length > 0) {
-          catCard.innerHTML = `
-            <div class="bg-slate-900/90 px-4 py-2.5 border-b border-slate-700/60 flex justify-between items-center">
-              <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center gap-2">
-                <i data-lucide="check-square" class="w-4 h-4"></i>
-                ${catName}
-              </h3>
-            </div>
-            <div>${itemsHtml}</div>
-          `;
-          container.appendChild(catCard);
-        }
-      });
-
-      if (container.children.length === 0) {
-        container.innerHTML = `
-          <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-8 text-center text-slate-400">
-            <i data-lucide="filter" class="w-10 h-10 mx-auto mb-2 opacity-50"></i>
-            <p class="text-sm font-semibold">No items match the selected filter "${currentFilter.toUpperCase()}"</p>
+        catCard.innerHTML = `
+          <div class="bg-slate-900/90 px-4 py-2.5 border-b border-slate-700/80 flex items-center justify-between">
+            <h3 class="text-xs font-extrabold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="folder" class="w-3.5 h-3.5"></i>
+              ${catName}
+            </h3>
+            <span class="text-[10px] font-bold text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full">${visibleItems.length} items</span>
           </div>
+          <div>${itemsHtml}</div>
         `;
-      }
+
+        container.appendChild(catCard);
+      });
 
       lucide.createIcons();
     }
@@ -739,52 +750,53 @@
       updateDashboardStats();
     }
 
-    function updateRemarks(itemId, text) {
+    function updateRemark(itemId, value) {
       if (!currentInspection[itemId]) {
         currentInspection[itemId] = { status: null, remarks: '' };
       }
-      currentInspection[itemId].remarks = text;
+      currentInspection[itemId].remarks = value;
     }
 
     function updateDashboardStats() {
-      let total = CHECKLIST_ITEMS.length + 2; // +1 for deep cleaning, +1 for license registration
       let yesCount = 0;
       let noCount = 0;
-      let pendingCount = 0;
 
-      // 1. Deep cleaning count
+      // 1. Deep cleaning check
       if (VESSEL_INFO.deepCleaned === 'yes') yesCount++;
       else if (VESSEL_INFO.deepCleaned === 'no') noCount++;
 
-      // 2. License Registration Status count
-      const expDate = document.getElementById('license-exp-date')?.value;
-      if (expDate) {
-        if (isLicenseExpiredDate(expDate)) {
-          noCount++; // Categorized as an Issue!
-        } else {
-          yesCount++; // Categorized as Passed
-        }
-      } else {
-        pendingCount++;
+      // 2. License expiry check
+      const isExpired = isLicenseExpiredDate(VESSEL_INFO.licenseExp);
+      if (isExpired) {
+        noCount++;
+      } else if (VESSEL_INFO.licenseExp !== '') {
+        yesCount++;
       }
 
-      // 3. Items count
-      CHECKLIST_ITEMS.forEach(item => {
-        const st = currentInspection[item.id]?.status;
-        if (st === 'yes') yesCount++;
-        else if (st === 'no') noCount++;
-        else pendingCount++;
+      // 3. 23 Checklist items check
+      Object.values(currentInspection).forEach(it => {
+        if (it.status === 'yes') yesCount++;
+        if (it.status === 'no') noCount++;
       });
 
-      const completed = yesCount + noCount;
-      const pct = Math.round((completed / total) * 100);
+      const totalItems = 25; // 23 items + deep clean + license check
+      const answeredCount = yesCount + noCount;
+      const pendingCount = totalItems - answeredCount;
+      const pct = Math.round((answeredCount / totalItems) * 100);
 
-      document.getElementById('stat-total').innerText = total;
-      document.getElementById('stat-yes').innerText = yesCount;
-      document.getElementById('stat-no').innerText = noCount;
-      document.getElementById('stat-pending').innerText = pendingCount;
-      document.getElementById('completion-percentage').innerText = `${pct}% Complete`;
-      document.getElementById('progress-bar').style.width = `${pct}%`;
+      const statTotal = document.getElementById('stat-total');
+      const statYes = document.getElementById('stat-yes');
+      const statNo = document.getElementById('stat-no');
+      const statPending = document.getElementById('stat-pending');
+      const pctBadge = document.getElementById('completion-percentage');
+      const progressBar = document.getElementById('progress-bar');
+
+      if (statTotal) statTotal.innerText = totalItems;
+      if (statYes) statYes.innerText = yesCount;
+      if (statNo) statNo.innerText = noCount;
+      if (statPending) statPending.innerText = pendingCount;
+      if (pctBadge) pctBadge.innerText = `${pct}% Completed`;
+      if (progressBar) progressBar.style.width = `${pct}%`;
     }
 
     function setFilter(filter) {
@@ -806,14 +818,174 @@
       });
       renderChecklist();
       updateDashboardStats();
-      showToast('All checklist items marked YES', 'check-circle-2', 'emerald');
+      showToast('All checklist items marked as Passed (YES)!', 'check-circle-2', 'emerald');
     }
 
     function applyPresetDefaults() {
       initInspectionState();
-      renderChecklist();
-      updateDashboardStats();
-      showToast('Reset all items to unselected baseline', 'rotate-ccw');
+      showToast('Reset all checklist items to unselected neutral state', 'rotate-ccw', 'amber');
+    }
+
+    async function fetchWithTimeout(resource, options = {}, timeout = 4000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      try {
+        const response = await fetch(resource, {
+          ...options,
+          signal: controller.signal
+        });
+        clearTimeout(id);
+        return response;
+      } catch (err) {
+        clearTimeout(id);
+        throw err;
+      }
+    }
+
+    async function fetchCloudReports(showNotification = false) {
+      const icon = document.getElementById('sync-spin-icon');
+      if (icon) icon.classList.add('animate-spin');
+
+      try {
+        if (!CLOUD_SYNC_CHANNEL) {
+          await createNewCloudChannel(showNotification);
+          return;
+        }
+
+        const response = await fetchWithTimeout(`${CLOUD_ENDPOINT_URL}${CLOUD_SYNC_CHANNEL}`, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        }, 4000);
+
+        if (response.ok) {
+          const cloudData = await response.json();
+          if (Array.isArray(cloudData)) {
+            const existingIds = new Set(savedReports.map(r => r.id));
+            let addedCount = 0;
+
+            cloudData.forEach(cloudRep => {
+              if (!existingIds.has(cloudRep.id)) {
+                savedReports.push(cloudRep);
+                addedCount++;
+              }
+            });
+
+            savedReports.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
+            localStorage.setItem('voodoo10_inspections', JSON.stringify(savedReports));
+            updateHistoryBadge();
+            notifyLocalTabs();
+
+            if (!document.getElementById('tab-history').classList.contains('hidden')) {
+              renderHistoryList();
+            }
+
+            updateCloudStatus(true, 'AUH Fleet Sync');
+            if (showNotification) {
+              showToast(addedCount > 0 ? `Synced! ${addedCount} new report(s) loaded` : 'Sync complete: Database up to date', 'cloud-check', 'emerald');
+            }
+          } else {
+            await pushReportsToCloud();
+            if (showNotification) showToast('Cloud synchronized successfully', 'cloud', 'cyan');
+          }
+        } else if (response.status === 404) {
+          await createNewCloudChannel(showNotification);
+        } else {
+          updateCloudStatus(false, `HTTP Error ${response.status}`);
+          if (showNotification) {
+            showToast(`Sync warning (HTTP ${response.status}): Using local logs`, 'alert-circle', 'amber');
+          }
+        }
+      } catch (err) {
+        console.warn('Cloud sync error/timeout:', err);
+        updateCloudStatus(false, 'Local Cache Mode');
+        if (showNotification) {
+          showToast('Sync offline / timed out: Using local records', 'wifi-off', 'amber');
+        }
+      } finally {
+        if (icon) icon.classList.remove('animate-spin');
+      }
+    }
+
+    async function pushReportsToCloud() {
+      if (!CLOUD_SYNC_CHANNEL) {
+        await createNewCloudChannel(false);
+        return;
+      }
+
+      try {
+        const response = await fetchWithTimeout(`${CLOUD_ENDPOINT_URL}${CLOUD_SYNC_CHANNEL}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(savedReports)
+        }, 4000);
+
+        if (response.ok) {
+          updateCloudStatus(true, 'AUH Fleet Sync');
+        } else if (response.status === 404) {
+          await createNewCloudChannel(false);
+        } else {
+          updateCloudStatus(false, 'Sync Warning');
+        }
+      } catch (e) {
+        console.warn('Push error:', e);
+        updateCloudStatus(false, 'Sync Pending (Offline)');
+      }
+    }
+
+    async function createNewCloudChannel(showNotification = false) {
+      try {
+        const response = await fetchWithTimeout(CLOUD_ENDPOINT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(savedReports)
+        }, 4000);
+
+        if (response.ok) {
+          const locationHeader = response.headers.get('Location');
+          if (locationHeader) {
+            const parts = locationHeader.split('/');
+            CLOUD_SYNC_CHANNEL = parts[parts.length - 1];
+          } else {
+            CLOUD_SYNC_CHANNEL = 'auh-fleet-' + Math.random().toString(36).substring(2, 8);
+          }
+
+          localStorage.setItem('voodoo10_sync_channel', CLOUD_SYNC_CHANNEL);
+          const channelInput = document.getElementById('sync-channel-id');
+          if (channelInput) channelInput.value = CLOUD_SYNC_CHANNEL;
+
+          updateCloudStatus(true, 'AUH Fleet Sync');
+          if (showNotification) {
+            showToast('New cloud sync channel created & synced!', 'cloud-upload', 'emerald');
+          }
+        } else {
+          updateCloudStatus(false, 'Local Offline Mode');
+        }
+      } catch (err) {
+        console.warn('Channel creation error:', err);
+        updateCloudStatus(false, 'Local Offline Mode');
+      }
+    }
+
+    function updateCloudStatus(isOnline, text) {
+      const badge = document.getElementById('cloud-status-badge');
+      const statusText = document.getElementById('cloud-status-text');
+      if (badge && statusText) {
+        badge.classList.remove('hidden');
+        if (isOnline) {
+          badge.className = "hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/80 border border-emerald-700/80 text-emerald-400 text-xs font-bold shadow-inner";
+        } else {
+          badge.className = "hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-950/80 border border-amber-700/80 text-amber-400 text-xs font-bold shadow-inner";
+        }
+        statusText.innerText = text;
+      }
+    }
+
+    function updateSyncChannel(val) {
+      if (val && val.trim()) {
+        CLOUD_SYNC_CHANNEL = val.trim();
+        localStorage.setItem('voodoo10_sync_channel', CLOUD_SYNC_CHANNEL);
+        fetchCloudReports(true);
+      }
     }
 
     function saveInspectionReport() {
@@ -822,7 +994,8 @@
         return;
       }
 
-      const vessel = document.getElementById('vessel-name').value.trim() || VESSEL_INFO.name;
+      const vesselSelect = document.getElementById('vessel-name');
+      const vessel = vesselSelect ? vesselSelect.value : VESSEL_INFO.name;
       const inspector = document.getElementById('inspector-name').value.trim();
       const date = document.getElementById('inspection-date').value;
       const shift = document.getElementById('inspection-shift').value;
@@ -834,7 +1007,6 @@
         return;
       }
 
-      // Check if all items are answered (YES or NO)
       const unanswered = CHECKLIST_ITEMS.filter(item => {
         const st = currentInspection[item.id]?.status;
         return st !== 'yes' && st !== 'no';
@@ -861,7 +1033,7 @@
       savedReports.unshift(report);
       localStorage.setItem('voodoo10_inspections', JSON.stringify(savedReports));
 
-      // Push instantly to shared cloud database for all colleagues
+      notifyLocalTabs();
       pushReportsToCloud();
 
       updateHistoryBadge();
@@ -880,82 +1052,8 @@
     }
 
     function updateHistoryBadge() {
-      document.getElementById('history-count-badge').innerText = savedReports.length;
-    }
-
-    async function fetchCloudReports(showNotification = false) {
-      const icon = document.getElementById('sync-spin-icon');
-      if (icon) icon.classList.add('animate-spin');
-
-      try {
-        const response = await fetch(`${CLOUD_ENDPOINT_URL}${CLOUD_SYNC_CHANNEL}`);
-        if (response.ok) {
-          const cloudData = await response.json();
-          if (Array.isArray(cloudData)) {
-            const existingIds = new Set(savedReports.map(r => r.id));
-            let addedCount = 0;
-
-            cloudData.forEach(cloudRep => {
-              if (!existingIds.has(cloudRep.id)) {
-                savedReports.push(cloudRep);
-                addedCount++;
-              }
-            });
-
-            savedReports.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
-            localStorage.setItem('voodoo10_inspections', JSON.stringify(savedReports));
-            updateHistoryBadge();
-
-            if (!document.getElementById('tab-history').classList.contains('hidden')) {
-              renderHistoryList();
-            }
-
-            updateCloudStatus(true, 'Cloud Sync Live');
-            if (showNotification) {
-              showToast(addedCount > 0 ? `Synced! ${addedCount} new report(s) loaded` : 'Database up to date', 'cloud-check', 'emerald');
-            }
-          }
-        }
-      } catch (err) {
-        console.warn('Cloud sync offline or using local mode:', err);
-        updateCloudStatus(false, 'Local Offline Mode');
-      } finally {
-        if (icon) icon.classList.remove('animate-spin');
-      }
-    }
-
-    async function pushReportsToCloud() {
-      try {
-        await fetch(`${CLOUD_ENDPOINT_URL}${CLOUD_SYNC_CHANNEL}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(savedReports)
-        });
-        updateCloudStatus(true, 'Cloud Sync Live');
-      } catch (e) {
-        updateCloudStatus(false, 'Sync Pending (Offline)');
-      }
-    }
-
-    function updateCloudStatus(isOnline, text) {
-      const badge = document.getElementById('cloud-status-badge');
-      const statusText = document.getElementById('cloud-status-text');
-      if (badge && statusText) {
-        badge.classList.remove('hidden');
-        if (isOnline) {
-          badge.className = "hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/80 border border-emerald-700/80 text-emerald-400 text-xs font-bold shadow-inner";
-        } else {
-          badge.className = "hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-950/80 border border-amber-700/80 text-amber-400 text-xs font-bold shadow-inner";
-        }
-        statusText.innerText = text;
-      }
-    }
-
-    function updateSyncChannel(val) {
-      if (val && val.trim()) {
-        CLOUD_SYNC_CHANNEL = val.trim();
-        fetchCloudReports(true);
-      }
+      const badge = document.getElementById('history-count-badge');
+      if (badge) badge.innerText = savedReports.length;
     }
 
     function switchTab(tab) {
@@ -980,6 +1078,7 @@
 
     function renderHistoryList() {
       const container = document.getElementById('history-list');
+      if (!container) return;
       container.innerHTML = '';
 
       if (savedReports.length === 0) {
@@ -1020,12 +1119,12 @@
         card.innerHTML = `
           <div class="space-y-1">
             <div class="flex items-center space-x-2 flex-wrap gap-y-1">
-              <span class="font-bold text-white text-base">${rep.vessel || 'Voodoo 10'}</span>
+              <span class="font-bold text-white text-base">${rep.vessel || 'VOODOO 10'}</span>
               <span class="text-xs px-2.5 py-0.5 rounded bg-slate-800 text-cyan-300 font-mono font-bold">${rep.date} (${rep.shift})</span>
               ${rep.deepCleaned === 'yes' ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">DEEP CLEANED</span>' : ''}
               ${isExpired ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800">LICENSE EXPIRED 🚨</span>' : ''}
               <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/80 flex items-center gap-1">
-                <i data-lucide="cloud" class="w-3 h-3"></i> Shared
+                <i data-lucide="cloud" class="w-3 h-3"></i> AUH Fleet
               </span>
             </div>
             <p class="text-xs text-slate-400">Inspector: <span class="text-slate-200 font-semibold">${rep.inspector}</span></p>
@@ -1115,10 +1214,7 @@
         if (it.status === 'no') noCount++;
       });
 
-      let itemsRowsHtml = '';
-
-      // License Registration explicitly listed in audit detail table
-      itemsRowsHtml += `
+      let itemsRowsHtml = `
         <tr class="border-b border-slate-700/50 text-xs bg-slate-900/40">
           <td class="py-2.5 px-3 font-semibold text-white print-text-dark">0. Boat License & Registration</td>
           <td class="py-2.5 px-3 text-slate-400 font-mono print-text-dark">Expiration Date: ${formatDateString(report.licenseExp)}</td>
@@ -1233,13 +1329,16 @@
     }
 
     function closeModal() {
-      document.getElementById('report-modal').classList.add('hidden');
+      const modal = document.getElementById('report-modal');
+      if (modal) modal.classList.add('hidden');
     }
 
     function showToast(message, iconName = 'info', color = 'cyan') {
       const toast = document.getElementById('toast');
       const msg = document.getElementById('toast-message');
       const iconContainer = document.getElementById('toast-icon');
+
+      if (!toast || !msg || !iconContainer) return;
 
       msg.innerText = message;
       iconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-5 h-5"></i>`;
@@ -1253,6 +1352,25 @@
         toast.classList.add('translate-y-20', 'opacity-0');
       }, 3000);
     }
+
+    window.onload = function() {
+      // Set today's date as default inspection date
+      const dateInput = document.getElementById('inspection-date');
+      if (dateInput) {
+        dateInput.value = new Date().toISOString().split('T')[0];
+      }
+
+      // Initialize state and render
+      initInspectionState();
+      loadSavedReports();
+      setDeepCleaningStatus('no'); // Enforce default NO state
+
+      const channelInput = document.getElementById('sync-channel-id');
+      if (channelInput) channelInput.value = CLOUD_SYNC_CHANNEL;
+
+      lucide.createIcons();
+      fetchCloudReports(false);
+    };
   </script>
 </body>
 </html>
